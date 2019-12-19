@@ -445,3 +445,11 @@ See RB.Taskboard.initialize()
 #project_quick_jump_box{
   max-width: 300px;
 }
+
+.ui-widget-overlay {
+	position: fixed;
+}
+
+.subject .story_field {
+	cursor: pointer;
+}
