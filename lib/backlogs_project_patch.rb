@@ -197,7 +197,7 @@ module Backlogs
         #sharing off: only the product itself is in the product backlog
         #sharing on: subtree is included in the product backlog
         if Backlogs.setting[:sharing_enabled] and self.rb_project_settings.show_stories_from_subprojects
-          self.self_and_descendants.visible.active
+          root.self_and_descendants.visible.active
         else
           [self]
         end

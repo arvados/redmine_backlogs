@@ -31,13 +31,13 @@ module Backlogs
 
   def platform_support(raise_error = false)
     travis = nil # needed so versions isn't block-scoped in the timeout
-    begin
-      ReliableTimout.timeout(10) { travis = YAML::load(open('https://raw.githubusercontent.com/themagician1/redmine_backlogs/master/.travis.yml').read) }
-      Rails.logger.warn "Used remote travis.yml"
-    rescue => e
+    #begin
+    #  ReliableTimout.timeout(10) { travis = YAML::load(open('https://raw.githubusercontent.com/themagician1/redmine_backlogs/master/.travis.yml').read) }
+    #  Rails.logger.warn "Used remote travis.yml"
+    #rescue => e
       travis = YAML::load(File.open(File.join(File.dirname(__FILE__), '..', '.travis.yml')).read)
-      Rails.logger.warn "Used local travis.yml: #{e}"
-    end
+      #Rails.logger.warn "Used local travis.yml: #{e}"
+    #end
 
     matrix = []
     travis['rvm'].each{|rvm|
