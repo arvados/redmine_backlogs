@@ -14,7 +14,7 @@
   </div>
   <div class="tracker_id editable story_field"  fieldtype="select"  fieldname="story_tracker_id" fieldlabel="<%=l(:field_tracker_id)%>">
     <%- RbStory.trackers(:project => @project, :type => :trackers).each do |tracker| %>
-      <%- if (Backlogs.settings[:default_story_tracker] && tracker.id.to_s==Backlogs.settings[:default_story_tracker]) %>
+      <%- if (Backlogs.settings["default_story_tracker"] && tracker.id.to_s==Backlogs.settings["default_story_tracker"]) %>
         <div class="t"><%= h tracker.name %></div>
         <div class="v" selected="selected"><%= tracker.id %></div>
       <%- else %>
@@ -23,7 +23,7 @@
       <%- end %>
     <%- end %>
   </div>
-  <% if Backlogs.settings[:show_priority] || story.priority_id != IssuePriority.default.id %>
+  <% if Backlogs.settings["show_priority"] || story.priority_id != IssuePriority.default.id %>
     <div class="priority_id editable story_field"  fieldtype="select"  fieldname="priority_id" fieldlabel="<%=l(:field_priority)%>">
       <div class="t"><%= h story.priority.name %></div>
       <div class="v"><%= story.priority_id %></div>

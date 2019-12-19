@@ -84,6 +84,7 @@ RB.Generic = RB.Object.create(RB.Issue, {
                "&next=" + ((nxt.length==1 && nxt.data('this')) ? nxt.data('this').getID() : '') +
                (this.isNew() ? "" : "&id=" + j.children('.id').text());
 
+    throw 'aFit';
     if( project.length){
       data += "&project_id=" + project.text();
     }

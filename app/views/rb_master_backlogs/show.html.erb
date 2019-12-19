@@ -8,6 +8,7 @@
     'jquery/jquery.liveFilter.setup.js',
     'jquery/jquery.multiselect.js',
     :plugin => 'redmine_backlogs') %>
+  <!-- %= javascript_include_tag('responsive.js', '/rb/server_variables.js') % -->
 <%- end %>
 <%- content_for :head_tags do %>
   <script type="text/javascript"
@@ -31,6 +32,7 @@
     'board_updater',
     'master_backlog_updater',
     :plugin => 'redmine_backlogs') %>
+  <%= stylesheet_link_tag 'application.css' %>
   <%= stylesheet_link_tag 'jquery/jquery.qtip.css', :plugin => 'redmine_backlogs' %>
   <%= stylesheet_link_tag 'jquery/jquery.multiselect.css', :plugin => 'redmine_backlogs' %>
   <%= stylesheet_link_tag 'master_backlog.css', :plugin => 'redmine_backlogs', :media => 'print,screen' %>
@@ -63,8 +65,8 @@
 
 <%- content_for :breadcrumbs do %>
   <%= l(:label_master_backlog) %>
-  <%= breadcrumb_split %>
-  <%= link_to l(:label_epics), :controller => :rb_epicboards, :action => :show, :project_id => @project %>
+  <!-- %= breadcrumb_split % -->
+  <!-- %= link_to l(:label_epics), :controller => :rb_epicboards, :action => :show, :project_id => @project % -->
   <%- if Backlogs.configured? && Backlogs.setting[:scaled_agile_enabled] %>
     <%= breadcrumb_split %>
     <%= link_to l(:label_rb_genericboard_plural), :controller => :rb_genericboards, :action => :index, :project_id => @project %>

@@ -292,6 +292,7 @@ ul li { vertical-align: bottom; } /* close IE7 gap between list items */
 /* backlog header*/
 #backlogs_container .header .name {
   padding-left: 8px;
+  padding-top: 5px;
   font-size: 15px;
   font-weight: bold;
   overflow: hidden;

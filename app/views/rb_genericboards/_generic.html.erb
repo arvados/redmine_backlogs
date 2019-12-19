@@ -50,13 +50,13 @@
         <div class="t"><%= assignee_name_or_empty(el) %></div>
         <div class="v"><%= assignee_id_or_empty(el) %></div>
       </div>
-      <% if Backlogs.settings[:show_priority] || el.priority_id != IssuePriority.default.id %>
+      <% if Backlogs.settings["show_priority"] || el.priority_id != IssuePriority.default.id %>
         <div class="priority_id editable"  fieldtype="select"  fieldname="priority_id" fieldlabel="<%=l(:field_priority)%>">
           <div class="t"><%= h el.priority.name %></div>
           <div class="v"><%= el.priority_id %></div>
         </div>
       <% end %>
-      <% if User.current.allowed_to?(:update_remaining_hours, @project) && Backlogs.settings[:use_remaining_hours] %>
+      <% if User.current.allowed_to?(:update_remaining_hours, @project) && Backlogs.settings["use_remaining_hours"] %>
         <div class="remaining_hours editable" fieldname="remaining_hours" fieldlabel="<%=l(:field_remaining_hours)%>"><%= remaining_hours_or_empty(el) %></div>
       <% end %>
       <% if User.current.allowed_to?(:log_time, @project) && @settings[:timelog_from_taskboard]=='enabled'  %>
@@ -78,7 +78,7 @@
           <span class="v"><%= el.project.id %></span>
         </div>
       <%- end %>
-      <% if Backlogs.setting[:story_points].blank? %>
+      <% if Backlogs.setting["story_points"].blank? %>
           <div class="story_points editable story_points_text story_field" style="display: none;" fieldname="story_points" fieldlabel="<%=l(:story_points)%>" fieldtype="input"><%= story_points_or_empty(el) %></div>
       <% else %>
           <div class="story_points editable story_points_select story_field" style="display: none;" fieldtype="select" fieldname="story_points" fieldlabel="<%=l(:story_points)%>">

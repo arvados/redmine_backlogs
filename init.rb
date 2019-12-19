@@ -192,9 +192,13 @@ Redmine::Plugin.register :redmine_backlogs do
 
   menu :project_menu, :rb_sprints, { :controller => :rb_sprints_roadmap, :action => :index }, :caption => :label_sprints, :after => :roadmap, :param => :project_id, :if => Proc.new { Backlogs.configured? && Backlogs.setting[:show_sprint_as_roadmap] }
   menu :project_menu, :rb_master_backlogs, { :controller => :rb_master_backlogs, :action => :show }, :caption => :label_backlogs, :after => :rb_sprints, :param => :project_id, :if => Proc.new { Backlogs.configured? }
-  menu :project_menu, :rb_epicboards, { :controller => :rb_epicboards, :action => :show }, :caption => :label_epics, :after => :rb_master_backlogs, :param => :project_id, :if => Proc.new { Backlogs.configured? }
+
+  # Remove epics menu item. Ward, 2017-10-22
+  #menu :project_menu, :rb_epicboards, { :controller => :rb_epicboards, :action => :show }, :caption => :label_epics, :after => :rb_master_backlogs, :param => :project_id, :if => Proc.new { Backlogs.configured? }
   menu :project_menu, :rb_taskboards, { :controller => :rb_taskboards, :action => :current }, :caption => :label_task_board, :after => :rb_epicboards, :param => :project_id, :if => Proc.new {|project| Backlogs.configured? && project && project.active_sprint }
-  menu :project_menu, :rb_releases, { :controller => :rb_releases, :action => :index }, :caption => :label_release_plural, :after => :rb_taskboards, :param => :project_id, :if => Proc.new { Backlogs.configured? }
+
+  # Remove releases menu item. Ward, 2017-10-22
+  #menu :project_menu, :rb_releases, { :controller => :rb_releases, :action => :index }, :caption => :label_release_plural, :after => :rb_taskboards, :param => :project_id, :if => Proc.new { Backlogs.configured? }
   menu :project_menu, :rb_genericboards, { :controller => :rb_genericboards, :action => :index },
     :caption => :label_rb_genericboard_plural, :after => :rb_releases, :param => :project_id,
     :if => Proc.new { Backlogs.configured? && Backlogs.setting[:scaled_agile_enabled] && RbGenericboard.count > 0 }

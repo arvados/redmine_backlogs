@@ -155,20 +155,20 @@ class RbSprint < Version
   end
 
   #override version load_issue_count to count only stories
-  def load_issue_counts
-    unless @issue_count
-      @open_issues_count = 0
-      @closed_issues_count = 0
-      stories.group(:status).count.each do |status, count|
-        if status.is_closed?
-          @closed_issues_count += count
-        else
-          @open_issues_count += count
-        end
-      end
-      @issue_count = @open_issues_count + @closed_issues_count
-    end
-  end
+#  def load_issue_counts
+#    unless @issue_count
+#      @open_issues_count = 0
+#      @closed_issues_count = 0
+#      stories.group(:status,:position).count.each do |status, count|
+#        if status.is_closed?
+#          @closed_issues_count += count
+#        else
+#          @open_issues_count += count
+#        end
+#      end
+#      @issue_count = @open_issues_count + @closed_issues_count
+#    end
+#  end
   
   # Returns the average estimated time of assigned issues
   # or 1 if no issue has an estimated time

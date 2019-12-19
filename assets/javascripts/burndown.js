@@ -89,10 +89,10 @@ RB.burndown.configure = function() {
     //here we get some weird expression error in jquery 1.6 as well as in 1.7
     try {
     var cb = RB.$('#burndown_series_' + value);
-    if (cb) { cb.attr('checked', false); }
+    if (cb) { cb.prop('checked', false); }
     } catch(e) {/*FIXME jquery Uncaught Syntax error, unrecognized expression: "*/}
   });
 
   var legend = RB.burndown.options.show_legend();
-  RB.$('#burndown_legend_' + legend).attr('checked', true);
+  RB.$('#burndown_legend_' + legend).prop('checked', true);
 };

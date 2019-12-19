@@ -28,7 +28,7 @@ class RbStory < RbGeneric
   end
 
   def self.__find_options_sprint_condition(project_id, sprint_ids)
-    if Backlogs.settings[:sharing_enabled]
+    if Backlogs.setting["sharing_enabled"]
       ["
         tracker_id in (?)
         and fixed_version_id IN (?)", self.trackers, sprint_ids]
@@ -84,7 +84,7 @@ class RbStory < RbGeneric
       :project => project_id,
       :sprint => sprint_id,
     })
-    if Backlogs.setting[:issue_release_relation] == 'multiple' && release_id
+    if Backlogs.setting["issue_release_relation"] == 'multiple' && release_id
       options = options.merge({
         :include_releases => true
       })
@@ -179,7 +179,7 @@ class RbStory < RbGeneric
     # somewhere early in the initialization process during first-time migration this gets called when the table doesn't yet exist
     trackers = []
     if has_settings_table
-      trackers = Backlogs.setting[tracker_setting]
+      trackers = Backlogs.setting[tracker_setting.to_s]
       trackers = [] if trackers.blank?
     end
 
@@ -196,7 +196,7 @@ class RbStory < RbGeneric
   end
 
   def self.trackers_include?(tracker_id)
-    tracker_ids = Backlogs.setting[tracker_setting] || []
+    tracker_ids = Backlogs.setting[tracker_setting.to_s] || []
     tracker_ids = tracker_ids.map(&:to_i)
     tracker_ids.include?(tracker_id.to_i)
   end
@@ -210,7 +210,7 @@ class RbStory < RbGeneric
 
     return self.journalized_update_attribute(:story_points, 0) if p.downcase == 's'
 
-    if Backlogs.setting[:story_points_are_integer]
+    if Backlogs.setting["story_points_are_integer"]
       return self.journalized_update_attribute(:story_points, Integer(p)) if Integer(p) >= 0
     else
       return self.journalized_update_attribute(:story_points, Float(p)) if Float(p) >= 0
@@ -221,7 +221,7 @@ class RbStory < RbGeneric
     params['prev'] = params.delete('prev_id') if params.include?('prev_id')
     params['next'] = params.delete('next_id') if params.include?('next_id')
 
-    params.delete('release_id') if Backlogs.settings[:use_one_product_backlog]
+    params.delete('release_id') if Backlogs.setting["use_one_product_backlog"]
 
     self.position!(params)
 

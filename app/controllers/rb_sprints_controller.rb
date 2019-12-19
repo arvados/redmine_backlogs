@@ -86,6 +86,9 @@ class RbSprintsController < RbApplicationController
   end
 
   def reset
+    # Disabled by Ward, 2017-10-25
+    render :text => 'Sprint reset feature has been disabled, sorry', :status => 400
+    return
     unless @sprint.sprint_start_date
       render :text => 'Sprint without start date cannot be reset', :status => 400
       return

@@ -4,14 +4,14 @@ class RbMasterBacklogsController < RbApplicationController
   unloadable
 
   def show
-    product_backlog_stories = RbStory.product_backlog(@project, @settings[:use_one_product_backlog])
+    product_backlog_stories = RbStory.product_backlog(@project, Backlogs.setting["use_one_product_backlog"])
     @product_backlog = { :sprint => nil, :stories => product_backlog_stories }
 
     #collect all sprints which are sharing into @project
     sprints = @project.open_shared_sprints
     @sprint_backlogs = RbStory.backlogs_by_sprint(@project, sprints)
 
-	  if @settings[:use_one_product_backlog]
+	  if Backlogs.setting["use_one_product_backlog"]
       @last_update = [product_backlog_stories,
         @sprint_backlogs.map{|s| s[:stories]},
         ].flatten.compact.map{|s| s.updated_on}.sort.last
@@ -35,7 +35,7 @@ class RbMasterBacklogsController < RbApplicationController
     label_new = :label_new_story
     add_class = 'add_new_story'
 
-    if @settings[:sharing_enabled]
+    if Backlogs.setting["sharing_enabled"]
       # FIXME: (pa sharing) usability is bad, menu is inconsistent. Sometimes we have a submenu with one entry, sometimes we have non-sharing behavior without submenu
       if @sprint #menu for sprint
         return [] unless @sprint.status == 'open' #closed/locked versions are not assignable versions
@@ -100,7 +100,7 @@ class RbMasterBacklogsController < RbApplicationController
              } if @sprint && @sprint.sprint_start_date && User.current.allowed_to?(:reset_sprint, @project)
     links << {:label => l(:label_version),
               :url => url_for(:controller => 'versions', :action => 'show', :id => @sprint, :target => '_blank', :only_path => true)
-             } if @sprint && !Backlogs.setting[:hide_roadmap]
+             } if @sprint && !Backlogs.setting["hide_roadmap"]
     links << {:label => l(:label_sprint),
               :url => url_for(:controller => 'rb_sprints_roadmap', :action => 'show', :sprint_id => @sprint, :target => '_blank', :only_path => true)
              } if @sprint

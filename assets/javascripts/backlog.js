@@ -297,7 +297,7 @@ RB.Backlog = RB.Object.create({
     var story = RB.$('#story_template').children().first().clone();
     if(project_id) {
       RB.$('#project_id_options').empty();
-      RB.$('#project_id_options').append('<option value="'+project_id+'">'+project_id+'</option>');
+      RB.$('#project_id_options').append('<option value="'+project_id+'" selected>'+project_id+'</option>');
     }
     
     if (RB.constants.new_story_position == 'bottom') {
@@ -356,10 +356,10 @@ RB.Backlog = RB.Object.create({
     RB.$('#charts').load( RB.urlFor('show_burndown_embedded', { id: this.getSprint().data('this').getID() }) );
     RB.$('#charts').dialog({ 
                           buttons: { "Close": function() { RB.$('#charts').dialog("close"); } },
-                          height: 590,
-                          modal: true, 
+                          height: 650,
+                          /* modal: true, */
                           title: 'Charts', 
-                          width: 710 
+                          width: 710
                        });
   }
 });

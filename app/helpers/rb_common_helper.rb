@@ -78,7 +78,7 @@ filter:progid:DXImageTransform.Microsoft.Gradient(Enabled=1,GradientType=0,Start
   end
 
   def mark_if_closed(story)
-    !story.new_record? && story.status.is_closed? ? "closed" : ""
+    !story.new_record? && !story.status.nil? && story.status.is_closed? ? "closed" : ""
   end
 
   def mark_scrum_status(story)

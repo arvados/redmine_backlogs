@@ -71,7 +71,7 @@ RB.Model = RB.Object.create({
       close: function(event, ui){ if(event.which==27) self.cancelEdit(); },
       dialogClass: self.getType().toLowerCase() + '_editor_dialog rb_editor_dialog',
       modal: true,
-      position: [pos.left - RB.$(document).scrollLeft(), pos.top - RB.$(document).scrollTop()],
+      position: {my: "left top", at: "left top", of: this.$},
       resizable: false,
       title: (this.isNew() ? this.newDialogTitle() : this.editDialogTitle())
     });
@@ -281,6 +281,7 @@ RB.Model = RB.Object.create({
       if(this.type.match(/select/)){
         j.children('div.' + fieldName).children('.v').text(editor.val());
         j.children('div.' + fieldName).children('.t').text(editor.children(':selected').text());
+//alert('in saveEdits');
       // } else if(this.type.match(/textarea/)){
       //   this.setValue('div.' + fieldName + ' .textile', editors[ii].value);
       //   this.setValue('div.' + fieldName + ' .html', '-- will be displayed after save --');
