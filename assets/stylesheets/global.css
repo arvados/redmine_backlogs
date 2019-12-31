@@ -120,10 +120,6 @@ ul.ui-sortable {
   display:none;
 }
 
-.story .category {
-	font-style: italic;
-}
-
 /* drag-drop effect: disabled dropzones are greyed out */
 .rb-sortable-disabled,
 .ui-sortable-disabled {

@@ -50,6 +50,8 @@ module Backlogs
           when :task_color_light
             value = self[:task_color].to_s
             value = Backlogs::Color.new(value).lighten(0.5) unless value == ''
+          when :show_category
+            value = '1'
           when :show_backlog_story_color , :show_assigned_to_full, :show_assigned_to_short, :show_category
 
           else
