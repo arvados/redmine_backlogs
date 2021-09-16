@@ -6,6 +6,8 @@ include ProjectsHelper
 class RbReleasesController < RbApplicationController
   unloadable
 
+  accept_api_auth :create
+
   def index
     @releases_open = @project.open_releases_by_date
     @releases_closed = @project.closed_releases_by_date
@@ -30,8 +32,13 @@ class RbReleasesController < RbApplicationController
     @release = RbRelease.new(release_params)
     @release.project = @project
     if @release.save
-      flash[:notice] = l(:notice_successful_create)
-      redirect_to :action => 'index', :project_id => @project
+      respond_to do |format|
+        format.html {
+          flash[:notice] = l(:notice_successful_create)
+          redirect_to :action => 'index', :project_id => @project
+        }
+        format.json { render :json => @release }
+      end
     else
       render action: :new
     end
