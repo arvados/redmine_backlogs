@@ -12,6 +12,10 @@ class RbReleasesController < RbApplicationController
     @releases_open = @project.open_releases_by_date
     @releases_closed = @project.closed_releases_by_date
     @releases_multiview = @project.releases_multiview
+    respond_to do |format|
+      format.html { render }
+      format.json { render :json => {open: @releases_open, closed: @releases_closed, multiview: @releases_multiview} }
+    end
   end
 
   def show
