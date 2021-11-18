@@ -6,7 +6,7 @@ include ProjectsHelper
 class RbReleasesController < RbApplicationController
   unloadable
 
-  accept_api_auth :create
+  accept_api_auth :create, :find_by_name
 
   def index
     @releases_open = @project.open_releases_by_date
@@ -24,6 +24,14 @@ class RbReleasesController < RbApplicationController
     respond_to do |format|
       format.html { render }
       format.csv  { send_data(release_burndown_to_csv(@release), :type => 'text/csv; header=present', :filename => 'export.csv') }
+    end
+  end
+
+  # find_by_name returns the first matching release. There is no unique index on release names.
+  def find_by_name
+    @release = RbRelease.where(:project_id => @project, :name=> params[:name]).first
+    respond_to do |format|
+      format.json { render :json => {release: @release } }
     end
   end
 

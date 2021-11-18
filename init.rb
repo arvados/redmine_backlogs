@@ -116,7 +116,7 @@ Redmine::Plugin.register :redmine_backlogs do
                                       }
 
     permission :view_releases,        {
-                                        :rb_releases         => [:index, :show],
+                                        :rb_releases         => [:index, :show, :find_by_name],
                                         :rb_sprints          => [:index, :show, :download],
                                         :rb_sprints_roadmap  => [:index, :show],
                                         :rb_wikis            => :show,
