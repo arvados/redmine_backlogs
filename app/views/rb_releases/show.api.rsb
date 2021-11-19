@@ -8,5 +8,5 @@ api.release do
   api.planned_velocity @release.planned_velocity
   api.status @release.status
   api.project_id @release.project_id
-#  api.project(:id => @release.project_id, :name => @release.project.name) unless @release.project.nil?
+  api.project(:id => @release.project_id, :name => @release.project.name) unless @release.project.nil?
 end
