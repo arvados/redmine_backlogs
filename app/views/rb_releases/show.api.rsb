@@ -1,0 +1,12 @@
+api.release do
+  api.id @release.id
+  api.name @release.name
+  api.description @release.description
+  api.sharing @release.sharing
+  api.release_start_date @release.release_start_date
+  api.release_end_date @release.release_end_date
+  api.planned_velocity @release.planned_velocity
+  api.status @release.status
+  api.project_id @release.project_id
+#  api.project(:id => @release.project_id, :name => @release.project.name) unless @release.project.nil?
+end

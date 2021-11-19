@@ -6,7 +6,7 @@ include ProjectsHelper
 class RbReleasesController < RbApplicationController
   unloadable
 
-  accept_api_auth :create, :find_by_name
+  accept_api_auth :show, :create, :find_by_name
 
   def index
     @releases_open = @project.open_releases_by_date
@@ -24,6 +24,7 @@ class RbReleasesController < RbApplicationController
     respond_to do |format|
       format.html { render }
       format.csv  { send_data(release_burndown_to_csv(@release), :type => 'text/csv; header=present', :filename => 'export.csv') }
+      format.api
     end
   end
 
@@ -49,7 +50,7 @@ class RbReleasesController < RbApplicationController
           flash[:notice] = l(:notice_successful_create)
           redirect_to :action => 'index', :project_id => @project
         }
-        format.json { render :json => @release }
+        format.api  { render :action => 'show', :status => :created, :location => rb_release_url(@release) }
       end
     else
       render action: :new
