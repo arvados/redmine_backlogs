@@ -43,8 +43,9 @@
 <ul style="list-style:none; margin:0px">
   <li><label>
     <select class="userfilter" size="5" name="filter-user-selection" multiple="multiple" title="User selection">
-      <option value='s'>Show empty Stories</option>
-      <option value='c'>Show closed Stories</option>
+      <option value='s'>Show empty</option>
+      <option value='c'>Show closed</option>
+      <option value='u'>Show unassigned</option>
       <optgroup label="Users">
       <% @project.assignable_users.sort.each do |member| %>
         <option value="<%= member.id %>"> <%= member.name %></option>

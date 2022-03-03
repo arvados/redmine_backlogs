@@ -234,6 +234,9 @@ RB.UserFilter = RB.Object.create({
   onUnCheckAll: function() {
     var uid = RB.$("#userid").text();
     this.el.multiselect("widget").find(":checkbox[value='"+uid+"']").each(function() {this.checked = true;} );
+    // Keep "show unassigned" checked by default, because we want every team member to be aware
+    // of those stories/tasks: they are a joint team responsibility.
+    this.el.multiselect("widget").find(":checkbox[value='u']").each(function() {this.checked = true;} );
     this.updateUI();
   },
 
@@ -251,19 +254,31 @@ RB.UserFilter = RB.Object.create({
       } catch(e){ return; }
 
       try{
-        story_id = RB.$(".meta .story_id", this).text();
-        story_ownerid = RB.$("#story_"+story_id+" .meta .assigned_to_id").text()
-        isVisStory = ((story_ownerid == "") || me.el.multiselect("widget").find(":checkbox[value='"+story_ownerid+"']").is(':checked'));
+        storyID = RB.$(".meta .story_id", this).text();
+        story_ownerid = RB.$("#story_"+storyID+" .meta .assigned_to_id").text()
+        showUnassigned = me.el.multiselect("widget").find(":checkbox[value='u']").is(':checked');
+        showClosed = me.el.multiselect("widget").find(":checkbox[value='c']").is(':checked');
+        isUnassignedStory = (story_ownerid == "");
+        isClosedStory = RB.$("#story_"+storyID).hasClass('closed');
+        isVisStory = me.el.multiselect("widget").find(":checkbox[value='"+story_ownerid+"']").is(':checked');
       } catch(e){ return; }
 
+      isClosed = RB.$(this).hasClass('closed');
       // show tasks if:
-      // * they are unassigned
-      // * they are assigned to a user that should be shown
-      // * they are on a story that is unassigned
-      // * they are on a story assigned to a user that should be shown
-      if (!task_ownerid || me.el.multiselect("widget").find(":checkbox[value='"+task_ownerid+"']").is(':checked') || isVisStory) {
+      // * they are unassigned and "Show unassigned" is checked
+      // * OR they are closed and "Show closed" is checked
+      // * OR they are assigned to a user that should be shown
+      // * OR they are on a story that is unassigned and "Show unassigned" is checked
+      // * OR they are on a story that is closed and "Show closed" is checked
+      // * OR they are on a story assigned to a user that should be shown
+      if ((!task_ownerid && showUnassigned) ||
+          (isClosed && showClosed) ||
+          (task_ownerid && me.el.multiselect("widget").find(":checkbox[value='"+task_ownerid+"']").is(':checked')) ||
+          (isUnassignedStory && showUnassigned) ||
+          (isClosedStory && showClosed) ||
+          isVisStory) {
         RB.$(this).show();
-      }else {
+      } else {
         RB.$(this).hide();
       }
     });
@@ -274,13 +289,15 @@ RB.UserFilter = RB.Object.create({
     //Check if all stories should be visible even if not used
     var showUnusedStories = this.el.multiselect("widget").find(":checkbox[value='s']").is(':checked');
     var showClosedStories = this.el.multiselect("widget").find(":checkbox[value='c']").is(':checked');
+    var showUnassigned = this.el.multiselect("widget").find(":checkbox[value='u']").is(':checked');
 
     //Parse through all the stories and hide the ones not used
     RB.$('.story').each(function() {
       var sprintInfo = RB.$(this).children('.id').children('a')[0];
       var storyID = sprintInfo.innerHTML;
       story_ownerid = RB.$(".meta .assigned_to_id", this).text();
-      isVisStory = ((story_ownerid == "") || me.el.multiselect("widget").find(":checkbox[value='"+story_ownerid+"']").is(':checked'));
+      isUnassigned = (story_ownerid == "");
+      isVisStory = me.el.multiselect("widget").find(":checkbox[value='"+story_ownerid+"']").is(':checked');
 
       var isClosed = RB.$(this).hasClass('closed');
 
@@ -297,12 +314,17 @@ RB.UserFilter = RB.Object.create({
         });
       });
 
-      // Hide or show story row (subject to showUnusedStories and showClosedStories) if:
-      // * it has visible tasks
-      // * it is unassigned
-      // * it is assigned to a user that should be shown
-      if (((hasVisTasks || (showUnusedStories && !hasTasks)) && (showClosedStories || !isClosed)) ||
-          ((isVisStory || (showUnusedStories && !hasTasks)) && (showClosedStories || !isClosed)))
+      // Show story row if:
+      // * it is unassigned and "Show unassigned" is checked
+      // * OR it is empty and "Show empty" is checked
+      // * OR it is closed and "Show closed" is checked
+      // * OR it is assigned to a user that should be shown
+      // * OR it has visible tasks
+      if ((isUnassigned && showUnassigned) ||
+          (showUnusedStories && !hasTasks) ||
+          (showClosedStories && isClosed) ||
+          isVisStory ||
+          hasVisTasks)
         RB.$(this).closest('tr').show();
       else
         RB.$(this).closest('tr').hide();
