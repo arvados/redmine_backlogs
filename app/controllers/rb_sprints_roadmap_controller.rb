@@ -55,6 +55,10 @@ class RbSprintsRoadmapController < RbApplicationController
         @sprint = RbSprint.find(params[:sprint_id])
         @stories = RbStory.sprint_backlog(@sprint)
       }
+      format.json {
+        @sprint = RbSprint.find(params[:sprint_id])
+        render :json => {sprint: @sprint}
+      }
     end
   end
 
