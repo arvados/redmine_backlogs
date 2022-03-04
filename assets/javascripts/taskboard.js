@@ -220,11 +220,14 @@ RB.UserFilter = RB.Object.create({
     me.el = RB.$(".userfilter");
     me.el.multiselect({
       selectedText: _("Filter tasks"),
-      noneSelectedText: _("Filter tasks: my tasks"),
+      selfSelectedText: _("Filter tasks: my tasks"),
+      noneSelectedText: _("Filter tasks: nobody"),
       checkAllText: _("All tasks"),
       uncheckAllText: _("My tasks"),
+      nobodyText: _("Nobody"),
       checkAll: function() { me.updateUI(); },
       uncheckAll: function() { me.onUnCheckAll(); },
+      nobody: function() { me.onUnCheckReallyAll(); },
       click: function() { me.updateUI(); }
     });
     me.el.multiselect('checkAll');
@@ -236,6 +239,14 @@ RB.UserFilter = RB.Object.create({
     this.el.multiselect("widget").find(":checkbox[value='"+uid+"']").each(function() {this.checked = true;} );
     // Keep "show unassigned" checked by default, because we want every team member to be aware
     // of those stories/tasks: they are a joint team responsibility.
+    this.el.multiselect("widget").find(":checkbox[value='u']").each(function() {this.checked = true;} );
+    this.updateUI();
+  },
+
+  /* uncheck really all users */
+  onUnCheckReallyAll: function() {
+    // Keep "show unassigned" and "empty" checked
+    this.el.multiselect("widget").find(":checkbox[value='s']").each(function() {this.checked = true;} );
     this.el.multiselect("widget").find(":checkbox[value='u']").each(function() {this.checked = true;} );
     this.updateUI();
   },
@@ -265,18 +276,17 @@ RB.UserFilter = RB.Object.create({
 
       isClosed = RB.$(this).hasClass('closed');
       // show tasks if:
-      // * they are unassigned and "Show unassigned" is checked
-      // * OR they are closed and "Show closed" is checked
+      // * they are not closed or they are on a story that is not closed or "Show closed" is checked AND
+      // * (they are unassigned and "Show unassigned" is checked
       // * OR they are assigned to a user that should be shown
       // * OR they are on a story that is unassigned and "Show unassigned" is checked
-      // * OR they are on a story that is closed and "Show closed" is checked
       // * OR they are on a story assigned to a user that should be shown
-      if ((!task_ownerid && showUnassigned) ||
-          (isClosed && showClosed) ||
+      // * )
+      if ((!isClosed || !isClosedStory || showClosed) &&
+         ((!task_ownerid && showUnassigned) ||
           (task_ownerid && me.el.multiselect("widget").find(":checkbox[value='"+task_ownerid+"']").is(':checked')) ||
           (isUnassignedStory && showUnassigned) ||
-          (isClosedStory && showClosed) ||
-          isVisStory) {
+          isVisStory)) {
         RB.$(this).show();
       } else {
         RB.$(this).hide();
@@ -315,16 +325,18 @@ RB.UserFilter = RB.Object.create({
       });
 
       // Show story row if:
-      // * it is unassigned and "Show unassigned" is checked
+      // * it is not closed or "Show closed" is checked AND
+      // * (it is unassigned and "Show unassigned" is checked
       // * OR it is empty and "Show empty" is checked
       // * OR it is closed and "Show closed" is checked
       // * OR it is assigned to a user that should be shown
       // * OR it has visible tasks
-      if ((isUnassigned && showUnassigned) ||
+      // * )
+      if ((!isClosed || showClosedStories) &&
+         ((isUnassigned && showUnassigned) ||
           (showUnusedStories && !hasTasks) ||
-          (showClosedStories && isClosed) ||
           isVisStory ||
-          hasVisTasks)
+          hasVisTasks))
         RB.$(this).closest('tr').show();
       else
         RB.$(this).closest('tr').hide();

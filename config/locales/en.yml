@@ -139,6 +139,7 @@ en:
   label_epics: Epics
   label_filter_tasks: "Filter by user"
   label_filter_tasks_my_tasks: "Filter by user - my tasks"
+  label_filter_tasks_nobody: "Filter by user - nobody"
   label_hide_completed_sprints: "Hide Completed Sprints"
   label_hours: hours
   label_hours_remaining: "remaining hours"
@@ -147,6 +148,7 @@ en:
   label_impediments: Impediments
   label_master_backlog: "Master Backlog"
   label_my_tasks: "My tasks"
+  label_nobody: "Nobody"
   label_new_sprint: "New Sprint"
   label_new_story: "New Story"
   label_no_data_to_show: "No data to show"

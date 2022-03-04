@@ -33,6 +33,7 @@ $.widget("ech.multiselect", {
 		classes: '',
 		checkAllText: 'Check all',
 		uncheckAllText: 'Uncheck all',
+		selfSelectedText: 'Select options',
 		noneSelectedText: 'Select options',
 		selectedText: '# selected',
 		selectedList: 0,
@@ -74,7 +75,7 @@ $.widget("ech.multiselect", {
 				.addClass('ui-helper-reset')
 				.html(function(){
 					if( o.header === true ){
-						return '<li><a class="ui-multiselect-all" href="#"><span class="ui-icon ui-icon-check"></span><span>' + o.checkAllText + '</span></a></li><li><a class="ui-multiselect-none" href="#"><span class="ui-icon ui-icon-closethick"></span><span>' + o.uncheckAllText + '</span></a></li>';
+						return '<li><a class="ui-multiselect-all" href="#"><span class="ui-icon ui-icon-check"></span><span>' + o.checkAllText + '</span></a></li><li><a class="ui-multiselect-user" href="#"><span class="ui-icon ui-icon-closethick"></span><span>' + o.uncheckAllText + '</span></a></li><li><a class="ui-multiselect-none" href="#"><span class="ui-icon ui-icon-closethick"></span><span>' + o.nobodyText + '</span></a></li>';
 					} else if(typeof o.header === "string"){
 						return '<li>' + o.header + '</li>';
 					} else {
@@ -211,6 +212,8 @@ $.widget("ech.multiselect", {
 
 		if( numChecked === 0 ){
 			value = o.noneSelectedText;
+		} else if( numChecked === 1 ){
+			value = o.selfSelectedText;
 		} else {
 			if($.isFunction( o.selectedText )){
 				value = o.selectedText.call(this, numChecked, $inputs.length, $checked.get());
@@ -282,7 +285,14 @@ $.widget("ech.multiselect", {
 
 				// check all / uncheck all
 				} else {
-					self[ $(this).hasClass('ui-multiselect-all') ? 'checkAll' : 'uncheckAll' ]();
+					if ($(this).hasClass('ui-multiselect-all')) {
+						link = 'checkAll';
+					} else if ($(this).hasClass('ui-multiselect-user')) {
+						link = 'uncheckAll';
+					} else {
+						link = 'nobody';
+					}
+					self[link]();
 				}
 
 				e.preventDefault();
@@ -629,9 +639,26 @@ $.widget("ech.multiselect", {
 		this._trigger('checkAll');
 	},
 
+	// badly named function, it really means select only my own checkbox
 	uncheckAll: function(){
+		// uncheck all checkboxes, this triggers a button label update
 		this._toggleChecked(false);
+		// re-check our own checkbox
+		var uid = RB.$("#userid").text();
+		this.inputs.each(function() {
+			if ( this.value === uid) {
+				this.setAttribute('aria-selected', true);
+				this['checked'] = true;
+			}
+		});
+		// trigger a button label update
+		this.update();
 		this._trigger('uncheckAll');
+	},
+
+	nobody: function(){
+		this._toggleChecked(false);
+		this._trigger('nobody');
 	},
 
 	getChecked: function(){
@@ -673,6 +700,9 @@ $.widget("ech.multiselect", {
 				menu.find('a.ui-multiselect-all span').eq(-1).text(value);
 				break;
 			case 'uncheckAllText':
+				menu.find('a.ui-multiselect-user span').eq(-1).text(value);
+				break;
+			case 'nobodyText':
 				menu.find('a.ui-multiselect-none span').eq(-1).text(value);
 				break;
 			case 'height':

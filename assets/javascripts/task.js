@@ -38,7 +38,6 @@ RB.Task = RB.Object.create(RB.Issue, {
   
   editorDisplayed: function(dialog){
     dialog_bgcolor=this.$.css('background-color');
-console.log("yoyoyo");
     dialog_bg=this.$.css('background-image');
     if(dialog_bgcolor=='initial'||dialog_bgcolor=='rgba(0, 0, 0, 0)'||dialog_bgcolor=='transparent'){
       // Chrome could not handling background-color css when use -webkit-gradient.

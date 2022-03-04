@@ -63,8 +63,6 @@ RB.Model = RB.Object.create({
     var pos = this.$.offset();
     var self = this;
 
-    console.log("thinger!");
-
     editor.dialog({
       buttons: {
         "Cancel" : function(){ self.cancelEdit(); RB.$(this).dialog("close"); },
