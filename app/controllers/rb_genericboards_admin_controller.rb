@@ -4,8 +4,8 @@ include RbGenericboardsHelper
 class RbGenericboardsAdminController < ApplicationController
   unloadable
 
-  before_filter :find_rb_genericboard, :except => [:index, :new, :create]
-  before_filter :authorize_global
+  before_action :find_rb_genericboard, :except => [:index, :new, :create]
+  before_action :authorize_global
 
   def index
     @rb_genericboards = RbGenericboard.order(:name)

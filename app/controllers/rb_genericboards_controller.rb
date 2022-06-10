@@ -4,7 +4,7 @@ include RbGenericboardsHelper
 class RbGenericboardsController < RbApplicationController
   unloadable
 
-  before_filter :find_rb_genericboard, :except => [ :index ]
+  before_action :find_rb_genericboard, :except => [ :index ]
 
   private
 
