@@ -152,6 +152,7 @@ ul.ui-sortable {
 
 .backlog_tooltip {
   font-size: 1em;
+  white-space: normal;
 }
 
 .backlog_tooltip .header {
