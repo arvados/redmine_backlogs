@@ -27,7 +27,7 @@ class RbStory < RbGeneric
     end
   end
 
-  def self.__find_options_sprint_condition(project_id, sprint_ids)
+  def self.__find_options_sprint_condition(project_id, sprint_ids, tracker_ids)
     if Backlogs.setting["sharing_enabled"]
       ["
         tracker_id in (?)
@@ -40,7 +40,7 @@ class RbStory < RbGeneric
     end
   end
 
-  def self.__find_options_release_condition(project_id, release_ids)
+  def self.__find_options_release_condition(project_id, release_ids, tracker_ids)
     ["
       issues.project_id in (#{Project.find(project_id).projects_in_shared_product_backlog.map{|p| p.id}.join(',')})
       and tracker_id in (?)
@@ -48,7 +48,7 @@ class RbStory < RbGeneric
       and release_id in (?)", self.trackers, release_ids]
   end
 
-  def self.__find_options_pbl_condition(project_id)
+  def self.__find_options_pbl_condition(project_id, tracker_ids, include_releases)
     ["
       issues.project_id in (#{Project.find(project_id).projects_in_shared_product_backlog.map{|p| p.id}.join(',')})
       and tracker_id in (?)
@@ -234,7 +234,7 @@ class RbStory < RbGeneric
       ).safe_attribute_names
     end
     attribs = params.select{|k,v| !['prev', 'id', 'project_id', 'lft', 'rgt'].include?(k) && safe_attributes_names.include?(k) }
-    attribs = Hash[*attribs.flatten]
+    attribs = attribs.to_enum.to_h
 
     return self.journalized_update_attributes attribs
   end

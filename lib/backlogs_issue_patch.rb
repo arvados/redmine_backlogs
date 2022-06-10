@@ -14,7 +14,7 @@ module Backlogs
 
         acts_as_list_with_gaps :default => (Backlogs.setting[:new_story_position] == 'bottom' ? 'bottom' : 'top')
 
-        has_one :backlogs_history, :class_name => RbIssueHistory, :dependent => :destroy
+        has_one :backlogs_history, :class_name => 'RbIssueHistory', :dependent => :destroy
         has_many :rb_release_burnchart_day_cache, :dependent => :delete_all
 
         belongs_to :rb_issue_release
@@ -173,7 +173,7 @@ module Backlogs
       end
 
       def invalidate_release_burnchart_data
-        RbReleaseBurnchartDayCache.delete_all(["issue_id = ? AND day >= ?",self.id,Date.today])
+        RbReleaseBurnchartDayCache.where(["issue_id = ? AND day >= ?",self.id,Date.today]).delete_all
         #FIXME Missing cleanup of older cache entries which is no longer
         # valid for any releases. Delete cache entries not related to
         # current release?

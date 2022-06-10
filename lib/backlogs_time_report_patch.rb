@@ -27,4 +27,4 @@ module Backlogs
   end
 end
 
-Redmine::Helpers::TimeReport.send(:include,Backlogs::TimeReportPatch) unless Redmine::Helpers::TimeReport.included_modules.include? Backlogs::TimeReportPatch
+Redmine::Helpers::TimeReport.send(:include, Backlogs::TimeReportPatch) unless Redmine::Helpers::TimeReport.included_modules.include? Backlogs::TimeReportPatch

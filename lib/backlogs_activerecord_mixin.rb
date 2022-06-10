@@ -35,10 +35,12 @@ module Backlogs
 
       def journalized_update_attributes!(attribs)
         self.init_journal(User.current)
+        attribs = attribs.to_enum.to_h
         return self.update_attributes!(attribs)
       end
       def journalized_update_attributes(attribs)
         self.init_journal(User.current)
+        attribs = attribs.to_enum.to_h
         return self.update_attributes(attribs)
       end
       def journalized_update_attribute(attrib, v)

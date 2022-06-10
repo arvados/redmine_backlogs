@@ -82,14 +82,16 @@ class RbTask < Issue
       end
     end
 
-    task = new(attribs)
+    attribs = attribs.to_enum.to_h
+    task = RbTask.new(attribs)
     if params['parent_issue_id']
       parent = Issue.find(params['parent_issue_id'])
       task.start_date = parent.start_date
     end
-    task.save!
 
-    raise "Block list must be comma-separated list of task IDs" if is_impediment && !task.validate_blocks_list(blocks) # could we do that before save and integrate cross-project checks?
+    return task if is_impediment && !task.validate_blocks_list(blocks)
+
+    task.save!
 
     task.move_before params[:next] unless is_impediment # impediments are not hosted under a single parent, so you can't tree-order them
     task.update_blocked_list blocks.split(/\D+/) if is_impediment
@@ -135,7 +137,7 @@ class RbTask < Issue
                             true
                           end
 
-    if valid_relationships && result = self.journalized_update_attributes!(attribs)
+    if valid_relationships && result = self.journalized_update_attributes(attribs)
       move_before params[:next] unless is_impediment # impediments are not hosted under a single parent, so you can't tree-order them
       update_blocked_list params[:blocks].split(/\D+/) if params[:blocks]
 
