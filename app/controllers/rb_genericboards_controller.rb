@@ -226,7 +226,7 @@ class RbGenericboardsController < RbApplicationController
     rescue => e
       Rails.logger.error "Error in genericboards create: #{e}"
       e.backtrace.each {|l| Rails.logger.error l}
-      render :text => e.message.blank? ? e.to_s : e.message, :status => 400
+      render plain: e.message.blank? ? e.to_s : e.message, :status => 400
       return
     end
 
@@ -251,7 +251,7 @@ class RbGenericboardsController < RbApplicationController
     rescue => e
       Rails.logger.error "Error in genericboards update: #{e}"
       e.backtrace.each {|l| Rails.logger.error l}
-      render :text => e.message.blank? ? e.to_s : e.message, :status => 400
+      render plain: e.message.blank? ? e.to_s : e.message, :status => 400
       return
     end
     if attrs.include? :parent_issue_id

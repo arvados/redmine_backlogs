@@ -28,7 +28,7 @@ class RbSprintsController < RbApplicationController
     rescue => e
       Rails.logger.debug e
       Rails.logger.debug e.backtrace.join("\n")
-      render :text => e.message.blank? ? e.to_s : e.message, :status => 400
+      render plain: e.message.blank? ? e.to_s : e.message, :status => 400
       return
     end
 
@@ -49,7 +49,7 @@ class RbSprintsController < RbApplicationController
     rescue => e
       Rails.logger.debug e
       Rails.logger.debug e.backtrace.join("\n")
-      render :text => e.message.blank? ? e.to_s : e.message, :status => 400
+      render plain: e.message.blank? ? e.to_s : e.message, :status => 400
       return
     end
 
@@ -87,10 +87,10 @@ class RbSprintsController < RbApplicationController
 
   def reset
     # Disabled by Ward, 2017-10-25
-    render :text => 'Sprint reset feature has been disabled, sorry', :status => 400
+    render plain: 'Sprint reset feature has been disabled, sorry', :status => 400
     return
     unless @sprint.sprint_start_date
-      render :text => 'Sprint without start date cannot be reset', :status => 400
+      render plain: 'Sprint without start date cannot be reset', :status => 400
       return
     end
 
