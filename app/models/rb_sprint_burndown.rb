@@ -5,13 +5,13 @@ class RbSprintBurndown < ActiveRecord::Base
   self.table_name = 'rb_sprint_burndown'
   belongs_to :version
 
-  attr_accessible :directon, :version_id, :stories, :burndown
+  #attr_accessible :directon, :version_id, :stories, :burndown
 
   serialize :stories, Array
   serialize :burndown, Hash
   after_initialize :init
 
-  attr_accessible :stories, :burndown, :direction, :version
+  #attr_accessible :stories, :burndown, :direction, :version
 
   def direction
     @direction

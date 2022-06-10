@@ -15,9 +15,9 @@ end
 
 class RbGenericboard < ActiveRecord::Base
   include Redmine::SafeAttributes
-  attr_accessible :col_type, :element_type, :name, :prefilter, :colfilter, :rowfilter, :row_type,
-    :include_none_in_rows, :include_none_in_cols, :include_closed_elements, :immutable_positions,
-    :hide_empty_rows
+  #attr_accessible :col_type, :element_type, :name, :prefilter, :colfilter, :rowfilter, :row_type,
+  #  :include_none_in_rows, :include_none_in_cols, :include_closed_elements, :immutable_positions,
+  #  :hide_empty_rows
   serialize :prefilter, Array
   serialize :rowfilter, Array
   serialize :colfilter, Array

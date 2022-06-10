@@ -9,7 +9,7 @@ class RbIssueRelease < ActiveRecord::Base
   safe_attributes 'issue_id',
     'release_id'
     
-  attr_accessible :issue_id, :release_id
+  #attr_accessible :issue_id, :release_id
  
   after_create  :call_issues_release_added_callback
   after_destroy :call_issues_release_removed_callback

@@ -168,8 +168,8 @@ class RbRelease < ActiveRecord::Base
   has_many :rb_issue_release, :class_name => 'RbIssueRelease', :foreign_key => 'release_id', :dependent => :delete_all
   has_many :issues_multiple, :class_name => 'RbStory', :through => :rb_issue_release, :source => :issue
 
-  attr_accessible :project_id, :name, :release_start_date, :release_end_date, :status
-  attr_accessible :project, :description, :planned_velocity, :sharing
+  #attr_accessible :project_id, :name, :release_start_date, :release_end_date, :status
+  #attr_accessible :project, :description, :planned_velocity, :sharing
 
   validates_presence_of :project_id, :name, :release_start_date, :release_end_date
   validates_inclusion_of :status, :in => RELEASE_STATUSES
