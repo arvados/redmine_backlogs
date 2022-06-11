@@ -59,7 +59,7 @@ class RbTask < Issue
     attribs = params.select {|k,v| safe_attributes_names.include?(k) }
     # lft and rgt fields are handled by acts_as_nested_set
     attribs = attribs.select{|k,v| k != 'lft' and k != 'rgt' }
-    attribs = Hash[*attribs.flatten] if attribs.is_a?(Array)
+    attribs = attribs.to_enum.to_h if attribs.is_a?(Array)
     return attribs
   end
 

@@ -145,7 +145,7 @@ class RbStory < RbGeneric
     attribs = params.select{|k,v| !['prev', 'next', 'id', 'lft', 'rgt'].include?(k) && RbStory.column_names.include?(k) }
 
     attribs[:status] = RbStory.class_default_status
-    attribs = Hash[*attribs.flatten]
+    attribs = attribs.to_enum.to_h
     s = RbStory.new(attribs)
     s.save!
     s.update_and_position!(params)

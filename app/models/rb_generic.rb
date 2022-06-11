@@ -187,7 +187,7 @@ class RbGeneric < Issue
     # lft and rgt fields are handled by acts_as_nested_set
     attribs = params.select{|k,v| !['prev', 'next', 'id', 'lft', 'rgt'].include?(k) && RbStory.column_names.include?(k) }
     attribs[:status] = RbStory.class_default_status
-    attribs = Hash[*attribs.flatten]
+    attribs = attribs.to_enum.to_h
     s = self.new(attribs)
     s.save!
     s.position!(params)
@@ -202,7 +202,7 @@ class RbGeneric < Issue
 
     # lft and rgt fields are handled by acts_as_nested_set
     attribs = params.select{|k,v| !['prev', 'id', 'project_id', 'lft', 'rgt'].include?(k) && RbStory.column_names.include?(k) }
-    attribs = Hash[*attribs.flatten]
+    attribs = attribs.to_enum.to_h
 
     return self.journalized_update_attributes attribs
   end
