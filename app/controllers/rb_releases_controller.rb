@@ -68,7 +68,7 @@ class RbReleasesController < RbApplicationController
     except = ['id', 'project_id']
     attribs = params.select{|k,v| (!except.include? k) and (RbRelease.column_names.include? k) }
     attribs = attribs.merge(release_params.select{|k,v| (!except.include? k)}) if params[:release]
-    attribs = Hash[*attribs.flatten]
+    attribs = attribs.to_enum.to_h
     begin
       result  = @release.update_attributes attribs
     rescue => e
