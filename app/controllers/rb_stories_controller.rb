@@ -1,5 +1,4 @@
 require 'prawn'
-require 'backlogs_printable_cards'
 
 include RbCommonHelper
 

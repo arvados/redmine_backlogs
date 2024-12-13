@@ -1,3 +1,5 @@
+class BacklogsActsAsCachedJournaled end
+
 module ActiveRecord; module Acts; end; end
 module ActiveRecord::Acts::ActsAsRbCachedJournaled
 

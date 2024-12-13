@@ -1,3 +1,5 @@
+class BacklogsProjectsHelperOverride end
+
 ProjectsHelper.module_eval do
     # Returns a set of options for a select field, grouped by project.
     # override so we also see team of sprint/version.

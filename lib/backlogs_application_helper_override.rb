@@ -1,3 +1,5 @@
+class BacklogsApplicationHelperOverride end
+
 ApplicationHelper.module_eval do
   # Original generates a link to a version
   # Now generate a link to a sprint

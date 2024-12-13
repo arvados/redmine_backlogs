@@ -1,5 +1,4 @@
 require 'date'
-require 'linear_regression'
 
 class ReleaseBurndown
   def initialize(release)

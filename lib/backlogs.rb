@@ -211,7 +211,7 @@ module Backlogs
 
     def safe_load
       # At the first migration, the settings table will not exist
-      return {} unless Setting.table_exists?
+      return {} unless Setting.table_exists? && Setting.respond_to?(:plugin_redmine_backlogs)
 
       settings = Setting.plugin_redmine_backlogs.dup
       if settings.is_a?(String)

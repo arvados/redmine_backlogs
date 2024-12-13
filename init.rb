@@ -3,15 +3,25 @@ require 'redmine'
 if Rails::VERSION::MAJOR < 3
   require 'dispatcher'
   object_to_prepare = Dispatcher
-else
+elsif Rails::VERSION::MAJOR < 6
   object_to_prepare = Rails.configuration
   # if redmine plugins were railties:
   # object_to_prepare = config
+else
+  object_to_prepare = ActiveSupport::Reloader
 end
-object_to_prepare.to_prepare do
-  require_dependency 'backlogs_redmine3nestedset_mixin'
-  require_dependency 'backlogs_activerecord_mixin'
-  require_dependency 'backlogs_setup'
+
+def check_redmine_version_ge(major, minor=nil)
+  return true if (Redmine::VERSION::MAJOR > major)
+  return (Redmine::VERSION::MAJOR == major) unless minor
+  return true if (Redmine::VERSION::MAJOR == major && Redmine::VERSION::MINOR >= minor)
+  return false
+end
+
+#object_to_prepare.to_prepare do
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/nested_set_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/active_record'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs'
   require_dependency 'issue'
 
   if Issue.const_defined? "SAFE_ATTRIBUTES"
@@ -23,34 +33,34 @@ object_to_prepare.to_prepare do
   end
 
   if (Redmine::VERSION::MAJOR > 2) || (Redmine::VERSION::MAJOR == 2 && Redmine::VERSION::MINOR >= 3)
-    require_dependency 'backlogs_time_report_patch'
+    require_dependency File.dirname(__FILE__) + '/lib/backlogs/time_report_patch'
   end
-  require_dependency 'backlogs_issue_query_patch'
-  require_dependency 'backlogs_issue_patch'
-  require_dependency 'backlogs_issue_status_patch'
-  require_dependency 'backlogs_journal_patch'
-  require_dependency 'backlogs_tracker_patch'
-  require_dependency 'backlogs_version_patch'
-  require_dependency 'backlogs_project_patch'
-  require_dependency 'backlogs_user_patch'
-  require_dependency 'backlogs_custom_field_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/issue_query_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/issue_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/issue_status_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/journal_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/tracker_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/version_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/project_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/user_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/custom_field_patch'
 
-  require_dependency 'backlogs_my_controller_patch'
-  require_dependency 'backlogs_issues_controller_patch'
-  require_dependency 'backlogs_projects_helper_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/my_controller_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/issues_controller_patch'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/projects_helper_patch'
 
-  require_dependency 'backlogs_hooks'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs_plugin/hooks'
 
-  require_dependency 'backlogs_merged_array'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/merged_array'
 
-  require_dependency 'backlogs_printable_cards'
-  require_dependency 'linear_regression'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs_printable_cards'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs/linear_regression'
   
-  require_dependency 'backlogs_projects_helper_override'
-  require_dependency 'backlogs_application_helper_override'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs_projects_helper_override'
+  require_dependency File.dirname(__FILE__) + '/lib/backlogs_application_helper_override'
 
   Redmine::AccessControl.permission(:manage_versions).actions << "rb_sprints/close_completed"
-end
+#end
 
 
 Redmine::Plugin.register :redmine_backlogs do
@@ -220,9 +230,3 @@ Redmine::Plugin.register :redmine_backlogs do
     :caption => :label_configure_genericboards, :if => Proc.new { Backlogs.configured? }
 end
 
-def check_redmine_version_ge(major, minor=nil)
-  return true if (Redmine::VERSION::MAJOR > major)
-  return (Redmine::VERSION::MAJOR == major) unless minor
-  return true if (Redmine::VERSION::MAJOR == major && Redmine::VERSION::MINOR >= minor)
-  return false
-end
