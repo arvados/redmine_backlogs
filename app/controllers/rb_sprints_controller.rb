@@ -45,7 +45,7 @@ class RbSprintsController < RbApplicationController
     attribs = params.select{|k,v| (!except.include? k) and (RbSprint.column_names.include? k) }
     attribs = attribs.to_enum.to_h
     begin
-      result  = @sprint.update_attributes attribs
+      result  = @sprint.update attribs
     rescue => e
       Rails.logger.debug e
       Rails.logger.debug e.backtrace.join("\n")
@@ -98,7 +98,7 @@ class RbSprintsController < RbApplicationController
     status = IssueStatus.default.id
     Issue.where(fixed_version_id: @sprint.id).find_each {|issue|
       ids << issue.id.to_s
-      issue.update_attributes!(:created_on => @sprint.sprint_start_date.to_time, :status_id => status)
+      issue.update!(:created_on => @sprint.sprint_start_date.to_time, :status_id => status)
     }
     if ids.size != 0
       ids = ids.join(',')
@@ -126,7 +126,7 @@ class RbSprintsController < RbApplicationController
     if @sprint.stories.open.any?
       flash[:error] = l(:error_cannot_close_sprint_with_open_stories)
     else
-      @sprint.update_attributes({:status => 'closed'})
+      @sprint.update({:status => 'closed'})
     end
     redirect_to :controller => 'rb_master_backlogs', :action => 'show', :project_id => @project
   end

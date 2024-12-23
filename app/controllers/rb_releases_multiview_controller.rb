@@ -34,7 +34,7 @@ class RbReleasesMultiviewController < RbApplicationController
       # Convert id's into numbers and remove blank
       params[:release_multiview][:release_ids]=selected_ids(params[:release_multiview][:release_ids])
 
-      if @release_multiview.update_attributes(params[:release_multiview])
+      if @release_multiview.update(params[:release_multiview])
         flash[:notice] = l(:notice_successful_update)
         redirect_to :controller => 'rb_releases_multiview', :action => 'show', :release_multiview_id => @release_multiview
       end
