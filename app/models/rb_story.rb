@@ -97,7 +97,7 @@ class RbStory < RbGeneric
       options = options.merge({
         :release => release_id
       })
-  
+
       self.visible.
         order("#{self.table_name}.position").
         backlog_scope(options)
@@ -148,7 +148,15 @@ class RbStory < RbGeneric
     attribs = attribs.to_enum.to_h
     s = RbStory.new(attribs)
     s.save!
-    s.update_and_position!(params)
+    retried = false
+    begin
+      s.update_and_position!(params)
+    rescue ActiveRecord::StaleObjectError
+      raise if retried
+      retried = true
+      s.reload
+      retry
+    end
 
     return s
   end
